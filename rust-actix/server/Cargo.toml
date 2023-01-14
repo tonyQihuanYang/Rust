@@ -10,3 +10,4 @@ database= { path = "../database" }
 actix-web = "4"
 
 
+base64 = "0.13.0"
