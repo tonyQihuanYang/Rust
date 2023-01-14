@@ -8,7 +8,6 @@ pub struct Account {
     pub username: String,
     pub password: String,
     pub created_on: SystemTime,
-    pub last_login: Option<SystemTime>,
 }
 
 #[derive(Insertable)]
