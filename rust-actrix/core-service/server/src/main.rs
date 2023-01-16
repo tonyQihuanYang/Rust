@@ -1,6 +1,7 @@
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 mod controllers;
 use crate::controllers::authenticate_controller;
+use database::{run_migration, establish_connection};
 
 #[get("/healthcheck")]
 async fn healthcheck() -> impl Responder {
@@ -9,6 +10,10 @@ async fn healthcheck() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+
+    let conn= &mut establish_connection();
+    run_migration(conn);
+
     HttpServer::new(|| {
         App::new()
             .service(healthcheck)
