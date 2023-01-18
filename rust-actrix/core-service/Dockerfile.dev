@@ -1,0 +1,18 @@
+FROM rustlang/rust:nightly
+
+
+# Install cargo dependencies
+# RUN cargo install diesel_cli --no-default-features --features postgres
+# RUN cargo install cargo-watch
+
+# Copy files
+WORKDIR /usr/src/app
+COPY ./ ./
+
+# Install Dependencies
+RUN cargo build --workspace
+
+EXPOSE 8080
+VOLUME ["/usr/local/cargo"]
+# CMD ["cargo", "watch", "-c", "-x", "run"]
+CMD ["cargo", "run"]

@@ -9,5 +9,7 @@ edition = "2021"
 database= { path = "../database" }
 actix-web = "4"
 
-
+# For hashing password
 base64 = "0.13.0"
+# Logger
+log = { version = "0.4", features = ["std", "serde"] }

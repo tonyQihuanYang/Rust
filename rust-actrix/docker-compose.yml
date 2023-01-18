@@ -1,0 +1,51 @@
+version: '3'
+
+# Yelb. nginx
+services:
+  postgres:
+    image: 'postgres:12'
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data/pgdata
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'password'
+      POSTGRES_DB: rust-actrix-core
+      PGDATA: /var/lib/postgresql/data/pgdata
+
+  redis:
+    image: 'bitnami/redis:latest'
+    ports:
+      - '6379:6379'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+
+  core_service:
+    ## Production
+    # build: ./core-service
+    ## Development
+    build:
+      context: ./core-service
+      dockerfile: Dockerfile.dev
+    ports:
+      - '8080:8080'
+    environment:
+      - DATABASE_URL=postgres://localhost/rust-actrix-core
+    # volumes:
+    #   - ./core-service:/*/
+    restart: always
+    depends_on:
+      - postgres
+      - redis
+    # diesel infer_schema macro gives warnings with this flag.
+    # environment:
+    #   - CARGO_INCREMENTAL=1
+    command: bash -c "bash ./wait_for_it.sh postgres:5432 -q -- cargo run"
+    # command: bash -c "bash ./wait_for_it.sh postgres:5432 -q -- cargo watch -x run"
+    # command: './core-service/cargo watch -x run'
+
+# cargo will try to redownload packages @ docker-compose up so store them here.
+volumes:
+  pgdata: {}
+#https://github.com/ghotiphud/rust-web-starter/tree/master/api_server
