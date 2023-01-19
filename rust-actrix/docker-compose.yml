@@ -9,9 +9,9 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data/pgdata
     environment:
-      POSTGRES_USER: 'postgres'
-      POSTGRES_PASSWORD: 'password'
-      POSTGRES_DB: rust-actrix-core
+      POSTGRES_USER: 'pguser'
+      POSTGRES_PASSWORD: 'supersecretpassword'
+      POSTGRES_DB: 'rust-actrix-core'
       PGDATA: /var/lib/postgresql/data/pgdata
 
   redis:
@@ -31,11 +31,14 @@ services:
     ports:
       - '8080:8080'
     environment:
-      - DATABASE_URL=postgres://localhost/rust-actrix-core
+      - DATABASE_URL=postgres://pguser:supersecretpassword@postgres:5432/rust-actrix-core
     # volumes:
     #   - ./core-service:/*/
     restart: always
     depends_on:
+      - postgres
+      - redis
+    links:
       - postgres
       - redis
     # diesel infer_schema macro gives warnings with this flag.

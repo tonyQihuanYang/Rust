@@ -15,4 +15,4 @@ RUN cargo build --workspace
 EXPOSE 8080
 VOLUME ["/usr/local/cargo"]
 # CMD ["cargo", "watch", "-c", "-x", "run"]
-CMD ["cargo", "run"]
+# CMD ["cargo", "run"]
