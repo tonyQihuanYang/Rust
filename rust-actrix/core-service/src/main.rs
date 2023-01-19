@@ -1,7 +1,8 @@
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use server::{establish_connection, run_migration};
+
 mod controllers;
 use crate::controllers::authenticate_controller;
-use database::{establish_connection, run_migration};
 
 #[get("/healthcheck")]
 async fn healthcheck() -> impl Responder {
@@ -22,14 +23,16 @@ impl log::Log for SimpleLogger {
     fn flush(&self) {}
 }
 
-use log::{LevelFilter, SetLoggerError};
+use log::LevelFilter;
 static LOGGER: SimpleLogger = SimpleLogger;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    log::set_logger(&LOGGER).map(|()| log::set_max_level(LevelFilter::Info));
-    log::info!("Core-Service Starting");
+    log::set_logger(&LOGGER)
+        .map(|()| log::set_max_level(LevelFilter::Info))
+        .expect("Error Initialize Logger");
 
+    log::info!("Core-Service Starting");
     log::info!("Start DB Migration");
     let conn = &mut establish_connection();
     run_migration(conn);

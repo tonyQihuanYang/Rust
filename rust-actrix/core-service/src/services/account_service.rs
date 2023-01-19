@@ -1,9 +1,9 @@
-use base64::encode;
-use database::{
+use crate::{
     data_access::accounts::{create_account, get_account_by_credentials},
     establish_connection,
     models::account::Account,
 };
+use base64::encode;
 
 pub fn login(username: &str, password: &str) -> Result<Account, ()> {
     let pool = &mut establish_connection();
