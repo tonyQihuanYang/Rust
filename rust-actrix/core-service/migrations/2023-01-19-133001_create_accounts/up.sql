@@ -1,5 +1,5 @@
 -- Your SQL goes here
-CREATE TABLE accounts (
+CREATE TABLE IF NOT EXISTS accounts (
 	id serial PRIMARY KEY,
 	username VARCHAR ( 50 ) UNIQUE NOT NULL,
 	password VARCHAR NOT NULL,

@@ -1,8 +1,7 @@
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
-use server::{establish_connection, run_migration};
-
-mod controllers;
-use crate::controllers::authenticate_controller;
+use rust_core_service::{
+    controllers::authenticate_controller, establish_connection, run_migration,
+};
 
 #[get("/healthcheck")]
 async fn healthcheck() -> impl Responder {
@@ -30,7 +29,7 @@ static LOGGER: SimpleLogger = SimpleLogger;
 async fn main() -> std::io::Result<()> {
     log::set_logger(&LOGGER)
         .map(|()| log::set_max_level(LevelFilter::Info))
-        .expect("Error Initialize Logger");
+        .expect("Error Initialize Logger v1");
 
     log::info!("Core-Service Starting");
     log::info!("Start DB Migration");

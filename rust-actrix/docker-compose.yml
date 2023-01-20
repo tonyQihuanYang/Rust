@@ -34,21 +34,25 @@ services:
       - DATABASE_URL=postgres://pguser:supersecretpassword@postgres:5432/rust-actrix-core
     # volumes:
     #   - ./core-service:/*/
-    restart: always
+    # restart: always
     depends_on:
       - postgres
       - redis
     links:
       - postgres
       - redis
+    volumes:
+      - ./core-service:/core-service
+      - rust_target:/core-service/target
+    command: sh -c "cargo watch -x run"
     # diesel infer_schema macro gives warnings with this flag.
     # environment:
     #   - CARGO_INCREMENTAL=1
-    command: bash -c "bash ./wait_for_it.sh postgres:5432 -q -- cargo run"
-    # command: bash -c "bash ./wait_for_it.sh postgres:5432 -q -- cargo watch -x run"
-    # command: './core-service/cargo watch -x run'
+    # command: bash -c "bash ./wait_for_it.sh postgres:5432 -q -- cargo watch -c -x run"
+    # command: bash -c "bash ./wait_for_it.sh postgres:5432 -q -- cargo run"
 
 # cargo will try to redownload packages @ docker-compose up so store them here.
 volumes:
   pgdata: {}
+  rust_target: {}
 #https://github.com/ghotiphud/rust-web-starter/tree/master/api_server

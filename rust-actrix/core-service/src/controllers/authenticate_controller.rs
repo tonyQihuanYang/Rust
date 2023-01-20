@@ -2,8 +2,8 @@
 // use crate::apis::auth::services::auth_services::login_user;
 // use crate::models::user::LoginCredentials;
 // use actix_session::Session;
+use crate::services::account_service;
 use actix_web::{get, post, web, HttpResponse};
-use server::services::account_service;
 
 #[get("/authenticate")]
 pub async fn authenticate() -> HttpResponse {
